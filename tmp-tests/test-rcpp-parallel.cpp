@@ -54,11 +54,22 @@ NumericVector parallelVectorSum(Environment BM) {
 
 
 /*** R
+RcppParallel::setThreadOptions(2)
 library(bigsnpr)
 snp <- snp_attachExtdata()
 G <- snp$genotypes
-parallelVectorSum(G)
+test0 <- parallelVectorSum(G)
+
 G2 <- big_copy(G, ind.row = rep(rows_along(G), 500))
 dim(G2)
-parallelVectorSum(G2)
+RcppParallel::setThreadOptions(1)
+system.time(test1 <- parallelVectorSum(G2))  # 100 / 3
+testthat::expect_identical(test1, 500 * test0)
+RcppParallel::setThreadOptions(2)
+system.time(test2 <- parallelVectorSum(G2))  # 177 / 39
+testthat::expect_identical(test2, 500 * test0)
+# RcppParallel::setThreadOptions(4)
+# system.time(parallelVectorSum(G2))  # 305 / 44
+# RcppParallel::setThreadOptions(10)
+# system.time(parallelVectorSum(G2))  # 689 / 53
 */
