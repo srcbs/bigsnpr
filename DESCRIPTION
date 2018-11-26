@@ -33,7 +33,8 @@ Imports:
     magrittr,
     Matrix,
     parallel, 
-    Rcpp, 
+    Rcpp,
+    RcppParallel,
     reshape2,
     robust,
     stats,
@@ -42,7 +43,8 @@ LinkingTo:
     BH,
     bigstatsr,
     Rcpp,
-    RcppArmadillo
+    RcppArmadillo,
+    RcppParallel
 Suggests:
     bindata,
     covr,
@@ -54,6 +56,7 @@ Suggests:
     spelling, 
     testthat
 Remotes: privefl/bigstatsr, bcm-uga/pcadapt
+SystemRequirements: GNU make
 RoxygenNote: 6.1.0
 Roxygen: list(markdown = TRUE)
 URL: https://privefl.github.io/bigsnpr
