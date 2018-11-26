@@ -55,11 +55,10 @@ clumpingChr <- function(G, S, ind.chr, ind.row, size, is.size.in.bp, infos.pos,
 
   # init
   # cache some computations
-  ncores <- `if`(foreach::getDoParRegistered(), 1,
-                 as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS")))
   stats <- big_parallelize(G, p.FUN = function(X, ind, ind.row) {
     bigstatsr::big_colstats(X, ind.row = ind.row, ind.col = ind)
-  }, p.combine = "rbind", ind = ind.chr, ind.row = ind.row, ncores = ncores)
+  }, p.combine = "rbind", ind = ind.chr, ind.row = ind.row,
+  ncores = as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS")))
   n <- length(ind.row)
   denoX <- (n - 1) * stats$var
 
