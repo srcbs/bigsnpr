@@ -54,15 +54,24 @@ clumpingChr <- function(G, S, ind.chr, ind.row, size, is.size.in.bp, infos.pos,
                         thr.r2, exclude) {
 
   # init
-  S.chr <- `if`(is.null(S), snp_MAF(G, ind.row, ind.chr), S[ind.chr])
+  # cache some computations
+  ncores <- `if`(foreach::getDoParRegistered(), 1,
+                 as.integer(Sys.getenv("RCPP_PARALLEL_NUM_THREADS")))
+  stats <- big_parallelize(G, p.FUN = function(X, ind, ind.row) {
+    bigstatsr::big_colstats(X, ind.row = ind.row, ind.col = ind)
+  }, p.combine = "rbind", ind = ind.chr, ind.row = ind.row, ncores = ncores)
+  n <- length(ind.row)
+  denoX <- (n - 1) * stats$var
+
+  if (is.null(S)) {
+    af <- stats$sum / (2 * n)
+    S.chr <- pmin(af, 1 - af)
+  } else {
+    S.chr <- S[ind.chr]
+  }
   ord.chr <- order(S.chr, decreasing = TRUE)
   remain <- rep(TRUE, length(ind.chr))
   remain[match(exclude, ind.chr)] <- FALSE
-
-  # cache some computations
-  stats <- big_colstats(G, ind.row = ind.row, ind.col = ind.chr)
-  n <- length(ind.row)
-  denoX <- (n - 1) * stats$var
 
   # main algo
   if (is.size.in.bp) {

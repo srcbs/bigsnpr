@@ -57,7 +57,7 @@ Suggests:
     testthat
 Remotes: privefl/bigstatsr, bcm-uga/pcadapt
 SystemRequirements: GNU make
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
 URL: https://privefl.github.io/bigsnpr
 BugReports: https://github.com/privefl/bigsnpr/issues

@@ -70,6 +70,8 @@ LogicalVector clumping(Environment BM,
 
   Prune prune_init(macc, remain, sumX, denoX, thr);
 
+  int grain = ::sqrt(size);
+
   for (k = 0; k < m; k++) {
     j0 = ordInd[k] - 1;
     if (remain[j0]) { // if already excluded, goto next
@@ -78,7 +80,7 @@ LogicalVector clumping(Environment BM,
       Prune prune(prune_init, j0);
       j_min = std::max(0, j0 - size);
       j_max = std::min(m, j0 + size + 1);
-      parallelFor(j_min, j_max, prune);
+      parallelFor(j_min, j_max, prune, grain);
       // for (j = j_min; j < j_max; j++) {
       //   if (remain[j]) { // if already excluded, goto next
       //     xySum = 0;
