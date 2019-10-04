@@ -152,7 +152,8 @@ snp_readBGEN <- function(bgenfiles, backingfile, list_snp_id,
     # Fill the FBM from BGEN files (and get SNP info)
     foreach(ic = seq_along(bgenfiles), .combine = 'rbind') %dopar% {
 
-      snp_id <- format_snp_id(list_snp_id[[ic]])
+      #snp_id <- format_snp_id(list_snp_id[[ic]])
+      snp_id <- list_snp_id[[ic]]
       infos <- snp_readBGI(bgifiles[ic], snp_id)
 
       # Get dosages in FBM
